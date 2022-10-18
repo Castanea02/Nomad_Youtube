@@ -2,9 +2,8 @@
   "name": "nomad_youtube_clone_coding",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon --exec babel-node src/Server.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +14,14 @@
   "bugs": {
     "url": "https://github.com/Castanea02/Nomad_Youtube/issues"
   },
-  "homepage": "https://github.com/Castanea02/Nomad_Youtube#readme"
+  "homepage": "https://github.com/Castanea02/Nomad_Youtube#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.19.3",
+    "@babel/node": "^7.19.1",
+    "@babel/preset-env": "7.13.10",
+    "nodemon": "^2.0.7"
+  }
 }
