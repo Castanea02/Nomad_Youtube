@@ -1,8 +1,24 @@
 import express from "express";
 
+const PORT = 8080;
+
 //express start
 const app = express();
 
-const handleListening = () => console.log("Server listening on port 4000");
+//Request Function
+const Req = () => 
+    console.log("Somebody is Request /");
 
-app.listen(8080, handleListening);
+//Request
+app.get("/", Req);
+
+
+
+
+
+
+const handleListening = () => 
+    console.log(`Server listening on port ahrhk2000.direct.quickconnect.to:${PORT}`);
+
+//Server Listen
+app.listen(PORT, handleListening);
