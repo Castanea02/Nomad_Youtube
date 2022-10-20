@@ -16,6 +16,6 @@ app.use("/videos", videoRouter);
 
 //Server ListenLogging
 const handleListening = () => 
-    console.log(`Server listening on port ahrhk2000.direct.quickconnect.to:${PORT}`);
+    console.log(`Server listening on ${PORT}`);
 //Server Listen
 app.listen(PORT, handleListening);
