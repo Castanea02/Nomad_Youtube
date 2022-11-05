@@ -1,16 +1,19 @@
-# Wetube Reloaded
+<h1>Wetube Reloaded URL Plan</h1>
 
-## Global
-/ -> Home
-/join -> Join
-/login -> Login
-/search -> Search
+<h2>Global</h2>
+/ -> Home<br>
+/join -> Join<br>
+/login -> Login<br>
+/search -> Search<br>
 
-/users/edit -> Edit user
-/users/delete -> Delete user
+<h2>Users</h2>
+/users/:id -> See User<br>
+/users/logout -> Logout<br>
+/users/edit -> Edit My Pofile<br>
+/users/delete -> Delete My Profile<br>
 
-/videos/watch -> Watch Video
-/videos/edit -> Edit Video
-/videos/delete -> Delete Video
-/videos/comments -> Comment on a video
-/videos/comments/delete -> Delete A Comment of a Video
+<h2>Videos</h2>
+/videos/:id -> See Video<br>
+/videos/:id/edit -> Edit Video<br>
+/videos/:id/delete -> Delete Video<br>
+/videos/upload -> Upload Video<br>
