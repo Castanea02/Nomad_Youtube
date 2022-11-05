@@ -1,8 +1,8 @@
+//글로벌 라우터
 import express from "express";
 import {join} from "../controller/userController";
 import {trending} from "../controller/videoController";
 
-//Global Router
 const globalRouter = express.Router();
 
 
