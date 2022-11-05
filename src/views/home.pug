@@ -1,9 +1,9 @@
 extends base.pug
+include mixins/video
 
 block content
    h2 welcome video
-   ul
-    each video in videos
-        li=video
+    each potato in videos
+        +video(potato)
     else 
-        li nothing found.
+        div nothing found.
