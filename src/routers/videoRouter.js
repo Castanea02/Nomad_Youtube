@@ -4,10 +4,10 @@ import {upload, edit, see, deleteVideo} from "../controller/videoController"; //
 
 const videoRouter = express.Router();//라우터 생성
 
-videoRouter.get("/upload", upload);//"/videos/edit" 요청처리
-videoRouter.get("/:id", see);//"/videos/param" 요청처리
-videoRouter.get("/:id/edit", edit);//"/videos/edit" 요청처리
-videoRouter.get("/:id/delete", deleteVideo);//"/videos/edit" 요청처리
+videoRouter.get("/upload", upload);//"/videos/upload" 요청처리
+videoRouter.get("/:id(\\d+)", see);//"/videos/param" 요청처리 (\\d+) <- digit 정규식
+videoRouter.get("/:id(\\d+)/edit", edit);//"/videos/edit" 요청처리
+videoRouter.get("/:id(\\d+)/delete", deleteVideo);//"/videos/deleteVideo" 요청처리
 
 
 export default videoRouter;
