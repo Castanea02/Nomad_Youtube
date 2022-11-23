@@ -14,6 +14,12 @@ const PORT = 8080;
 
 app.set("view engine", "pug"); //뷰엔진 퍼그 사용
 app.set("views", process.cwd() + "/src/views"); //Pug 작업 디렉토리 변경
+app.get("/robots.txt", (req, res) => {
+    res.type("text/plain");
+    res.send(
+        "User-agent:*\nDisallow:/"
+    );
+});
 
 app.use(logger); //morgan 함수를 이용한 요청로깅
 
