@@ -4,7 +4,6 @@ const requestIp = require('request-ip');
 
 export const home = async(req, res) => { //메인페이지 로드 home.pug
     console.log("Client IP : " + requestIp.getClientIp(req)); //IP Logging
-    
     const videos = await Video.find({}); //await, async (promise) 비디오 불러오기
 
     return res.render("home", {pageTitle:"Home", videos});
@@ -14,21 +13,34 @@ export const home = async(req, res) => { //메인페이지 로드 home.pug
 export const watch = async (req, res) => { //영상페이지 로드 watch.pug
     const id = req.params.id;
     const video = await Video.findById(id);
-
-    return res.render("watch", {pageTitle:video.title, video});
+    if(!video){
+       return res.render("404", {pageTitle:`Video Not Found`});
+    }
+    return res.render("watch", {pageTitle:video.title, video});    
 };
 
 
-export const getEdit = (req, res) => { //수정페이지 로드 edit.pug
+export const getEdit = async (req, res) => { //수정페이지 로드 edit.pug
     const id = req.params.id;
-    res.render("edit", { pageTitle:`Editing` });
+    const video = await Video.findById(id);
+
+    if(!video){
+        return res.render("404", {pageTitle:`Video Not Found`});
+    }
+
+    return res.render("edit", { pageTitle:`Edit : ${video.title}`,video});
 };
 
-
-export const postEdit = (req, res) => {//수정페이지 폼 POST edit.pug
-    const id = req.params.id;
-    const title = req.body.title;
-
+export const postEdit = async (req, res) => {//수정페이지 폼 POST edit.pug
+    const {id} = req.params;
+    const {title, description, hashtags} = req.body;
+    const video = await Video.exists({_id:id}); //true or false
+    if (!video){//error check
+        return res.render("404", {pageTitle:`Video Not Found`});
+    }
+    await Video.findByIdAndUpdate(id,{ //Update form
+        title,description,hashtags:Video.formatHashtags(hashtags),
+    })
     return res.redirect(`/Videos/${id}`);
 };
 
@@ -45,10 +57,17 @@ export const postUpload = async (req, res) => {//비디오 업로드 POST
             title:title,
             description:description,
             //createdAt:date.now(), << set default date
-            hashtags:hashtags.split(",").map((word) => `#${word}`),
+            hashtags:Video.formatHashtags(hashtags),
         }); //form 저장
         return res.redirect("/");
     }catch (error){//에러 발생시
         return res.render("upload",{ pageTitle:"Upload Video", errorMessage:error._message });
     }
+};
+
+export const deleteVideo = async(req, res) =>{
+    const{id}=req.params;
+    await Video.findByIdAndDelete(id);
+
+    return res.redirect("/");
 };
