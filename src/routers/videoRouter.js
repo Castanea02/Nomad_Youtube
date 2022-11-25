@@ -10,8 +10,8 @@ import {
 
 const videoRouter = express.Router();//라우터 생성
 
-videoRouter.get("/:id(\\d+)", watch);//"/videos/param" 요청처리 (\\d+) <- digit(숫자) 정규식
-videoRouter.route("/:id(\\d+)/edit").get(getEdit).post(postEdit);//post시 postEdit
 videoRouter.route("/Upload").get(getUpload).post(postUpload);//post시 postUpload
+videoRouter.get("/:id([0-9a-f]{24})", watch);//"/videos/param" 요청처리 <- digit(숫자) 정규식
+videoRouter.route("/:id([0-9a-f]{24})/edit").get(getEdit).post(postEdit);//post시 postEdit
 
 export default videoRouter;
