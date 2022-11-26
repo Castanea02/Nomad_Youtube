@@ -36,7 +36,7 @@ export const postEdit = async (req, res) => {//수정페이지 폼 POST edit.pug
     const {title, description, hashtags} = req.body;
     const video = await Video.exists({_id:id}); //true or false
     if (!video){//error check
-        return res.render("404", {pageTitle:`Video Not Found`});
+        return res.status(404).render("404", {pageTitle:`Video Not Found`});
     }
     await Video.findByIdAndUpdate(id,{ //Update form
         title,description,hashtags:Video.formatHashtags(hashtags),
@@ -61,7 +61,7 @@ export const postUpload = async (req, res) => {//비디오 업로드 POST
         }); //form 저장
         return res.redirect("/");
     }catch (error){//에러 발생시
-        return res.render("upload",{ pageTitle:"Upload Video", errorMessage:error._message });
+        return res.status(400).render("upload",{ pageTitle:"Upload Video", errorMessage:error._message });
     }
 };
 
