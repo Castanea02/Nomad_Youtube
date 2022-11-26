@@ -6,7 +6,6 @@ const userRouter = express.Router();//라우터 생성
 
 userRouter.get("/edit", edit);//"/user/edit" 요청처리
 userRouter.get("/delete", remove);//"/user/delete" 요청처리
-
 userRouter.get("logout", logout);
 userRouter.get(":id", see);
 
