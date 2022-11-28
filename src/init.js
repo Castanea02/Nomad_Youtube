@@ -1,3 +1,4 @@
+import "dotenv/config"; //use dotenv
 import "./db"; //DB연결
 import "./models/Video";
 import "./models/User"

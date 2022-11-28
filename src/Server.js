@@ -1,9 +1,11 @@
-
 import express from "express";
 import morgan from "morgan";
+import session from "express-session"; //session
+import MongoStore from "connect-mongo"; //session mongostore
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
+import { localsMiddleware } from "./middlewares";
 
 
 
@@ -24,6 +26,19 @@ app.get("/robots.txt", (req, res) => {
 app.use(logger); //morgan 함수를 이용한 요청로깅
 
 app.use(express.urlencoded({extended:true}));//express에서 form을 처리하기 위함
+
+app.use(
+    session({ //session을 위함
+        secret: process.env.COOKIE_SECRET,
+        resave:false,
+        saveUninitialized:false, //session 수정을 기준으로 저장 => 로그인 사용자에게만 session 주기
+        store: MongoStore.create({mongoUrl:process.env.DB_URL}), //session mongostore
+    })
+);
+
+
+app.use(localsMiddleware);
+
 
 app.use("/", rootRouter); //"/"로 요청된다면 root 라우터로 처리
 app.use("/videos", videoRouter); //"/videos"로 요청된다면 비디오 라우터로 처리

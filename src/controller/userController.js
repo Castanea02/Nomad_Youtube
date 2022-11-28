@@ -1,6 +1,7 @@
 //UserController export
 //요청시 반환
 import User from "../models/User";
+import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => {
@@ -67,8 +68,71 @@ export const postLogin = async (req, res) => {
         });
     }
     console.log("Log User In!");
+
+    req.session.loggedIn = true; //add Session information
+    req.session.user = user;
     return res.redirect("/");
 };
+
+export const startGithubLogin = (req, res) => {
+    const baseUrl = "https://github.com/login/oauth/authorize";
+    const config = {
+        client_id : process.env.GH_CLIENT,
+        allow_signup : false,
+        scope :"read:user user:email",
+    }
+    const params = new URLSearchParams(config).toString();
+    const finalUrl = `${baseUrl}?${params}`;
+
+    res.redirect(finalUrl);
+}
+
+
+export const finishGithubLogin = async (req, res) => {
+     const baseUrl =  "https://github.com/login/oauth/access_token";
+     const config = {
+        client_id:process.env.GH_CLIENT,
+        client_secret:process.env.GH_SECRET,
+        code:req.query.code,
+     }
+     const params = new URLSearchParams(config).toString();
+     const finalUrl = `${baseUrl}?${params}`
+     
+     const tokenRequest = await (await fetch(finalUrl,{
+            method:"POST",
+            headers:{
+                Accept: "application/json",
+            },
+        })
+     ).json();
+
+     if("access_token" in tokenRequest){
+        const {access_token} = tokenRequest;
+        const apiUrl = "https://api.github.com"
+        const userData = await(await fetch(`${apiUrl}/user`, {
+            headers:{
+                Authorization:`token ${access_token}`,
+            },
+        })
+        ).json();
+        console.log(userData);
+
+        const emailData = await(await fetch(`${apiUrl}/user/emails`, {
+            headers:{
+                Authorization:`token ${access_token}`,
+            },
+        })
+        ).json();
+
+        console.log(emailData);
+     }else{
+        return res.redirect("/login");
+     }
+
+
+
+};
+
 
 export const edit = (req, res) => res.send("Edit User");
 export const remove = (req, res) => res.send("Remove User");
