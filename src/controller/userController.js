@@ -98,7 +98,8 @@ export const finishGithubLogin = async (req, res) => {
      const params = new URLSearchParams(config).toString();
      const finalUrl = `${baseUrl}?${params}`
      
-     const tokenRequest = await (await fetch(finalUrl,{
+     const tokenRequest = await (
+        await fetch(finalUrl,{
             method:"POST",
             headers:{
                 Accept: "application/json",
@@ -109,22 +110,50 @@ export const finishGithubLogin = async (req, res) => {
      if("access_token" in tokenRequest){
         const {access_token} = tokenRequest;
         const apiUrl = "https://api.github.com"
-        const userData = await(await fetch(`${apiUrl}/user`, {
-            headers:{
-                Authorization:`token ${access_token}`,
-            },
-        })
+        const userData = await ( 
+            await fetch(`${apiUrl}/user`, {
+                headers:{
+                    Authorization:`token ${access_token}`,
+                },
+            })
         ).json();
         console.log(userData);
 
-        const emailData = await(await fetch(`${apiUrl}/user/emails`, {
-            headers:{
-                Authorization:`token ${access_token}`,
-            },
-        })
+        const emailData = await(
+            await fetch(`${apiUrl}/user/emails`, {
+                headers:{
+                    Authorization:`token ${access_token}`,
+                },
+            })
         ).json();
 
-        console.log(emailData);
+        const emailObj = emailData.find(
+            (email) => email.primary === true && email.verified === true
+        ); //email 데이터의 primary가 true이면서 verified가 true인 객체 저장
+
+        if(!emailObj){
+            return res.redirect("/login");
+        }
+
+        const user = await User.findOne({email:emailObj.email});
+        if(!user){
+            const user = await User.create({ //create User
+                name:userData.name,
+                username:userData.login, 
+                email:emailObj.email,
+                password:"",
+                socialOnly:true,
+                location:userData.location,
+            });
+        req.session.loggedIn = true; //add Session information
+        req.session.user = user;
+        return res.redirect("/");
+        }else{
+            req.session.loggedIn = true; //add Session information
+            req.session.user = user;
+            return res.redirect("/");
+        }
+
      }else{
         return res.redirect("/login");
      }
@@ -135,6 +164,8 @@ export const finishGithubLogin = async (req, res) => {
 
 
 export const edit = (req, res) => res.send("Edit User");
-export const remove = (req, res) => res.send("Remove User");
-export const logout = (req, res) => res.send("Logout");
+export const logout = (req, res) => {
+    req.session.destroy();
+    return res.redirect("/");
+}
 export const see = (req, res) => res.send("see");
