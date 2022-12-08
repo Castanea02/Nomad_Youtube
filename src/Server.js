@@ -38,5 +38,5 @@ app.use(localsMiddleware);
 app.use("/", rootRouter); //"/"로 요청된다면 root 라우터로 처리
 app.use("/videos", videoRouter); //"/videos"로 요청된다면 비디오 라우터로 처리
 app.use("/users", userRouter); //"/users로 요청된다면 유저 라우터로 처리"
-
+app.use("/uploads", express.static("uploads")); //파일 업로드 디렉토리 읽히기
 export default app;

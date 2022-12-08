@@ -7,7 +7,7 @@ import app from "./Server";
 const PORT = 8080;
 
 //Server ListenLogging
-const handleListening = () => console.log(`Server listening on ${PORT}`);
+const handleListening = () => console.log(`✅ Server listening on ${PORT}`);
 
 //Server Listen
 app.listen(PORT, handleListening);

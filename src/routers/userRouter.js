@@ -12,12 +12,21 @@ import {
   postChangePassword,
 } from "../controller/userController"; //유저 컨트롤러의 함수 임포트
 
-import { protectorMiddleware, publicOnlyMiddleware } from "../middlewares";
+import {
+  protectorMiddleware,
+  publicOnlyMiddleware,
+  uploadFiles,
+} from "../middlewares";
 
 const userRouter = express.Router(); //라우터 생성
 
 userRouter.get("/logout", protectorMiddleware, logout);
-userRouter.route("/edit").all(protectorMiddleware).get(getEdit).post(postEdit); //all > get 또는 Post 상관않고 모두 middleware 적용
+userRouter
+  .route("/edit")
+  .all(protectorMiddleware)
+  .get(getEdit)
+  .post(uploadFiles.single("avatar"), postEdit); //all > get 또는 Post 상관않고 모두 middleware 적용
+
 userRouter
   .route("/change-password")
   .all(protectorMiddleware)
