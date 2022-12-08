@@ -15,7 +15,7 @@ import {
 import {
   protectorMiddleware,
   publicOnlyMiddleware,
-  uploadFiles,
+  avatarUpload,
 } from "../middlewares";
 
 const userRouter = express.Router(); //라우터 생성
@@ -25,7 +25,7 @@ userRouter
   .route("/edit")
   .all(protectorMiddleware)
   .get(getEdit)
-  .post(uploadFiles.single("avatar"), postEdit); //all > get 또는 Post 상관않고 모두 middleware 적용
+  .post(avatarUpload.single("avatar"), postEdit); //all > get 또는 Post 상관않고 모두 middleware 적용
 
 userRouter
   .route("/change-password")

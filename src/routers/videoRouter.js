@@ -8,7 +8,7 @@ import {
   postUpload,
   deleteVideo,
 } from "../controller/videoController"; //비디오 컨트롤러의 함수 임포트
-import { protectorMiddleware } from "../middlewares";
+import { protectorMiddleware, videoUpload } from "../middlewares";
 
 const videoRouter = express.Router(); //라우터 생성
 
@@ -18,7 +18,7 @@ videoRouter
   .route("/Upload")
   .all(protectorMiddleware)
   .get(getUpload)
-  .post(postUpload); //post시 postUpload
+  .post(videoUpload.single("video"), postUpload); //post시 postUpload
 
 videoRouter
   .route("/:id([0-9a-f]{24})/edit")

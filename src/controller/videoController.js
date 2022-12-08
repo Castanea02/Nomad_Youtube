@@ -55,13 +55,15 @@ export const getUpload = (req, res) => {
 
 export const postUpload = async (req, res) => {
   //비디오 업로드 POST
+  const { path: fileUrl } = req.file;
   const { title, description, hashtags } = req.body; //form 내용 받아오기
   try {
     //예외처리
     await Video.create({
       //form내용 DB저장
-      title: title,
-      description: description,
+      title,
+      fileUrl,
+      description,
       //createdAt:date.now(), << set default date
       hashtags: Video.formatHashtags(hashtags),
     }); //form 저장
